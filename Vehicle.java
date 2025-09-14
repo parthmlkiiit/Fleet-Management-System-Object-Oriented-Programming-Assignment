@@ -1,5 +1,5 @@
 
-abstract class Vehicle {
+abstract class Vehicle implements Comparable<Vehicle>{
     // ---properties---
     private String id;
     private String model;
