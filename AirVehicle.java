@@ -18,4 +18,5 @@ abstract class AirVehicle extends Vehicle{
   public double getAltitude(){
     return maxAltitude;
   }
+
 }
