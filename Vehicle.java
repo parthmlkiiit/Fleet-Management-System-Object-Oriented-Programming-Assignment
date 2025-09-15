@@ -57,5 +57,15 @@ abstract class Vehicle implements Comparable<Vehicle>{
     }
         currentMileage += distance;
     }
+    // we need to change compare to for Collections.sort(fleet)
+    @Override
+    public int compareTo(Vehicle secondvehicle) {
+        try {
+            return Double.compare(secondvehicle.calculateFuelEfficiency(), this.calculateFuelEfficiency()); // descending order
+        } catch (InvalidOperationException error) { // if some error it is put at the end
+            System.out.println("Error when comparing these two" + secondvehicle.getId()+", "+ this.getId());
+            return 1;
+        }
+    }
 
 }
