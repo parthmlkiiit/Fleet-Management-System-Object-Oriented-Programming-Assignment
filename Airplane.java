@@ -5,6 +5,7 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
   private double cargoCapacity;
   private double currentCargo;
   private boolean maintenanceNeeded;
+  private double lastMaintenanceMileage = 0;
   public Airplane(String id, String model, double maxSpeed, double currentMileage, double maxAltitude) throws InvalidOperationException {
     super(id, model, maxSpeed, currentMileage, maxAltitude);
     this.fuelLevel = 0;//given initial value
@@ -63,10 +64,11 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
   }
   @Override 
   public boolean needsMaintenance(){
-    return (this.getCurrentMileage() > 10000);
+    return (this.getCurrentMileage() - lastMaintenanceMileage) >= 10000;
   }
   @Override
     public void performMaintenance() {
+        this.lastMaintenanceMileage = getCurrentMileage();
         this.maintenanceNeeded = false; 
         System.out.println("Maintenance performed on vehicle " + this.getId() + ". Flag reset."); 
     }
@@ -96,10 +98,26 @@ public class Airplane extends AirVehicle implements FuelConsumable, PassengerCar
     try {
       double used = consumeFuel(distance);
       addMileage(distance);
-      System.out.println("The airplane " + getId() + "flew " + distance + "km at altitude "+this.getAltitude()+", used " + used + "L while carrying " + this.currentCargo + "kgs of cargo and carrying " + this.currentPassengers + " passengers");
+      System.out.println("The airplane " + getId() + " flew " + distance + "km at altitude "+this.getAltitude()+", used " + used + "L while carrying " + this.currentCargo + "kgs of cargo and carrying " + this.currentPassengers + " passengers");
   } 
   catch (InsufficientFuelException e) {
     System.out.println("The airplane " + getId() + " cannot move: " + e.getMessage());
   }
+}
+// setters
+public void setFuelLevel(double fuelLevel) {
+    this.fuelLevel = fuelLevel;
+}
+public void setPassengerCapacity(int passengerCapacity) {
+    this.passengerCapacity = passengerCapacity;
+}
+public void setCurrentPassengers(int currentPassengers) {
+    this.currentPassengers = currentPassengers;
+}
+public void setCargoCapacity(double cargoCapacity) {
+    this.cargoCapacity = cargoCapacity;
+}
+public void setCurrentCargo(double currentCargo) {
+    this.currentCargo = currentCargo;
 }
 }

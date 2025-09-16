@@ -5,6 +5,7 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
   private double cargoCapacity;
   private double currentCargo;
   private boolean maintenanceNeeded;
+  private double lastMaintenanceMileage = 0;
   public Bus(String id, String model, double maxSpeed, double currentMileage, int numWheels) throws InvalidOperationException {
     super(id, model, maxSpeed, currentMileage, numWheels);
     this.fuelLevel = 0;//given initial value
@@ -63,10 +64,11 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
   }
   @Override 
   public boolean needsMaintenance(){
-    return (this.getCurrentMileage() > 10000);
+    return (this.getCurrentMileage() - lastMaintenanceMileage) >= 10000;
   }
   @Override
     public void performMaintenance() {
+        this.lastMaintenanceMileage = getCurrentMileage();
         this.maintenanceNeeded = false; 
         System.out.println("Maintenance performed on vehicle " + this.getId() + ". Flag reset."); 
     }
@@ -101,5 +103,21 @@ public class Bus extends LandVehicle implements FuelConsumable, PassengerCarrier
   catch (InsufficientFuelException e) {
     System.out.println("The bus " + getId() + " cannot move: " + e.getMessage());
   }
+}
+// setters
+public void setFuelLevel(double fuelLevel) {
+    this.fuelLevel = fuelLevel;
+}
+public void setPassengerCapacity(int passengerCapacity) {
+    this.passengerCapacity = passengerCapacity;
+}
+public void setCurrentPassengers(int currentPassengers) {
+    this.currentPassengers = currentPassengers;
+}
+public void setCargoCapacity(double cargoCapacity) {
+    this.cargoCapacity = cargoCapacity;
+}
+public void setCurrentCargo(double currentCargo) {
+    this.currentCargo = currentCargo;
 }
 }

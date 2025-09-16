@@ -1,9 +1,10 @@
 public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarrier, Maintainable {
 
     private double fuelLevel;
-    private final double cargoCapacity = 50000;   
+    private double cargoCapacity = 50000;   
     private double currentCargo;
     private boolean maintenanceNeeded;
+    private double lastMaintenanceMileage = 0;
 
     public CargoShip(String id, String model, double maxSpeed, double currentMileage, boolean hasSail) throws InvalidOperationException {
         super(id, model, maxSpeed, currentMileage, hasSail);
@@ -16,7 +17,7 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
     if (this.hasSail()) {
         return 0; // boat uses fuel no sail
     } else {
-        return 4.0; // motor with 4.0L 
+        return 4.0; // motor with 4.0km/L 
     }
 } // interfaces
   @Override
@@ -47,6 +48,9 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
   }
   @Override
   public double getFuelLevel(){
+    if (this.hasSail()){
+      return 0;
+    }
     return this.fuelLevel;
   }
   @Override
@@ -65,10 +69,11 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
   }
   @Override 
   public boolean needsMaintenance(){
-    return (this.getCurrentMileage() > 10000);
+    return (this.getCurrentMileage() - lastMaintenanceMileage) >= 10000;
   }
   @Override
     public void performMaintenance() {
+        this.lastMaintenanceMileage = getCurrentMileage();
         this.maintenanceNeeded = false; 
         System.out.println("Maintenance performed on vehicle " + this.getId() + ". Flag reset."); 
     }
@@ -88,5 +93,16 @@ public class CargoShip extends WaterVehicle implements FuelConsumable, CargoCarr
       System.out.println("The CargoShip " + getId() + " cannot move: " + e.getMessage());
     }
   }
+
+  // setters
+  public void setFuelLevel(double fuelLevel) {
+    this.fuelLevel = fuelLevel;
+  }
+  public void setCargoCapacity(double cargoCapacity) {
+    this.cargoCapacity = cargoCapacity;
+}
+  public void setCurrentCargo(double currentCargo) {
+    this.currentCargo = currentCargo;
+}
 
 }
