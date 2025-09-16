@@ -43,18 +43,18 @@ Test Persistence (CSV save/load)-
 ----------------------------------------
 Once you run `fleet.Main`, you will see a menu with numbered choices. Basic flow:
 
-1. **Add Vehicle** – choose type (Car, Truck, Bus, Airplane, CargoShip), enter required info (ID, model, speed, mileage, plus type-specific data like number of wheels, max altitude, has sail, etc.).
-2. **Remove Vehicle** – provide the ID to delete a vehicle.
-3. **Perform Action on Vehicle** – pick a type, select a vehicle, then do actions specific to that vehicle (load/unload passengers or cargo depending on type).
-4. **Start Journey** – simulate all vehicles moving a given distance (which updates mileage).
-5. **Refuel All** – (if implemented) refuel fuel-consuming vehicles.
-6. **Perform Maintenance** – perform maintenance on all vehicles that need it.
-7. **Generate Report** – shows summary: total number of vehicles, counts by type, average efficiency (excluding some special cases like sail-ships if applicable), total mileage, which vehicles need maintenance.
-8. **Save Fleet** – save current fleet data to CSV file.
-9. **Load Fleet** – load fleet data from a CSV file.
-10. **Search by Type** – list vehicles filtered by their class/type.
-11. **List Vehicles Needing Maintenance** – show IDs of vehicles with maintenance needed.
-12. **Exit** – quit the program.
+1. Add Vehicle – choose type (Car, Truck, Bus, Airplane, CargoShip), enter required info (ID, model, speed, mileage, plus type-specific data like number of wheels, max altitude, has sail, etc.).
+2. Remove Vehicle – provide the ID to delete a vehicle.
+3. Perform Action on Vehicle – pick a type, select a vehicle, then do actions specific to that vehicle (load/unload passengers or cargo depending on type).
+4. Start Journey – simulate all vehicles moving a given distance (which updates mileage).
+5. Refuel All – (if implemented) refuel fuel-consuming vehicles.
+6. Perform Maintenance – perform maintenance on all vehicles that need it.
+7. Generate Report – shows summary: total number of vehicles, counts by type, average efficiency (excluding some special cases like sail-ships if applicable), total mileage, which vehicles need maintenance.
+8. Save Fleet – save current fleet data to CSV file.
+9. Load Fleet – load fleet data from a CSV file.
+10. Search by Type – list vehicles filtered by their class/type.
+11. List Vehicles Needing Maintenance** – show IDs of vehicles with maintenance needed.
+12. Exit – quit the program.
 
 4. Walkthrough / Demo Example & Expected Output
 -----------------------------------------------
@@ -89,17 +89,27 @@ Current mileage => 500
 Number of wheels => 4
 Vehicle added successfully!
 
+Enter your choice :- 5
+you entered 5
+Currently the fleet consists of:
+Land vehicles: 1
+Air vehicles: 0
+Water vehicles: 0
+Enter fuel amount for land vehicles - 20
+Car - C1 fueled with 20.0L
+
 Enter your choice :- 4
 Enter journey distance=> 200
+The Car C1 moved 200.0 km and used 13.333333333333334 L
 Journey started for all vehicles
 
 Enter your choice :- 7
 --------FLEET REPORT--------
-Total vehicle => 1
-Num of cars => 1, Num of Trucks => 0, Num of buses => 0, Num of airplanes => 0, Num of Cargoships => 0
-Average efficiency (doesn’t include Sailships) => <some value based on Car’s efficiency computation>
-Total Mileage => 700.0
-Vehicles that need maintenance =>   ← likely none if mileage < threshold
+ Total vehicle => 1
+ Num of cars => 1, Num of Trucks => 0, Num of buses => 0, Num of airplanes => 0, Num of Cargoships => 0
+ Average efficiecy (doesnt include Sailships) => 15.0
+ Total Mileage => 700.0
+ Vehicles that need maintaince => (empty as C1 doesnt need)
 
 Enter your choice :- 8
 Enter file name to save fleet- myfleet.csv
