@@ -133,6 +133,8 @@ Total vehicle => 1
 
 5. Notes / Expected Behavior
 -----------------------------
+- When a vehicle is newly added it has no fuel so you have to refuel before starting
+- Proper exception/errors are handled for everything.
 - Total fuel consumption uses sum of ConsumeFuel as given in the pdf and also by the pdf Consume fuel actually reduces the fuel in all vehicles so while calling total fuel the fuel consumed is actually reduced.
 - Maintenance is required when mileage crosses 10,000 km.
 - Sorting by efficiency orders the fleet so that the most fuel-efficient show first (or according to your compareTo logic).
