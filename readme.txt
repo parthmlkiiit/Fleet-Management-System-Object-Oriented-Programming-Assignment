@@ -5,17 +5,13 @@ Fleet Management System (Object-Oriented Programming Assignment)
 
 1. Overview / OOP Concepts Demonstrated
 ----------------------------------------
-- **Abstract Classes**:
-  The `vehicles.Vehicle` class is defined as abstract. It has common fields (id, model, maxSpeed, currentMileage) and some concrete methods (e.g., `addMileage()`, getters). Subclasses (Car, Truck, Bus, Airplane, CargoShip) inherit from `Vehicle` and define abstract methods (e.g., `move()`, `calculateFuelEfficiency()`).
+- Abtract classes :  The `vehicles.Vehicle` class is defined as abstract. It has common fields (id, model, maxSpeed, currentMileage) and some concrete methods (e.g., `addMileage()`, getters). Subclasses (Car, Truck, Bus, Airplane, CargoShip) inherit from `Vehicle` and define abstract methods (e.g., `move()`, `calculateFuelEfficiency()`).
 
-- **Interfaces**:
-Interfaces such as `Maintainable` and `FuelConsumable` specify behaviour (methods) which some Vehicles are required to offer. For instance, classes that adhere to `Maintainable` need to specify `needsMaintenance()`, `performMaintenance()` etc. This enables the code (for instance, in `FleetManager`) to function polymorphically with any vehicle which "can be maintained" or "can use fuel".
+- Interfaces : Interfaces such as `Maintainable` and `FuelConsumable` specify behaviour (methods) which some Vehicles are required to offer. For instance, classes that adhere to `Maintainable` need to specify `needsMaintenance()`, `performMaintenance()` etc. This enables the code (for instance, in `FleetManager`) to function polymorphically with any vehicle which "can be maintained" or "can use fuel".
 
-- **Inheritance:**
-Subclasses inherit shared behavior and attributes from `Vehicle`. For instance, Car, Truck etc use the shared logic (id checks, mileage increments etc) specified in `Vehicle`. There is also method overloading: each subclass overrides `move()`, `calculateFuelEfficiency()` in its own fashion, perhaps tweaking for type.
+- Inheritance : Subclasses inherit shared behavior and attributes from `Vehicle`. For instance, Car, Truck etc use the shared logic (id checks, mileage increments etc) specified in `Vehicle`. There is also method overloading: each subclass overrides `move()`, `calculateFuelEfficiency()` in its own fashion, perhaps tweaking for type.
 
-- **Polymorphism**:
-The `FleetManager` holds and operates with a list of `Vehicle` references. At run-time, each `Vehicle` reference could point to a Car, Truck, Airplane, etc. When you invoke `move()`, `calculateFuelEfficiency()`, or `needsMaintenance()`, the appropriate subclass implementation is executed. Moreover, you can search by type or sort by efficiency, etc., without being concerned about exact subclass in many places.
+- Polymorphism : The `FleetManager` holds and operates with a list of `Vehicle` references. At run-time, each `Vehicle` reference could point to a Car, Truck, Airplane, etc. When you invoke `move()`, `calculateFuelEfficiency()`, or `needsMaintenance()`, the appropriate subclass implementation is executed. Moreover, you can search by type or sort by efficiency, etc., without being concerned about exact subclass in many places.
 
 2. How to Compile, Run, and Test Persistence
 ---------------------------------------------
@@ -54,9 +50,23 @@ Once you run `fleet.Main`, you will see a menu with numbered choices. Basic flow
 9. Load Fleet – load fleet data from a CSV file.
 10. Search by Type – list vehicles filtered by their class/type.
 11. List Vehicles Needing Maintenance** – show IDs of vehicles with maintenance needed.
-12. Exit – quit the program.
+12. Total fuel consumed by fleet for a journey - uses the gettotalfuelconsumption to get the total consumption by the fleet for a dist
+13. List all veh in fleet -  list all vehicles in fleet in format "type - id" eg "airplane - a001"
+14. Exit – quit the program.
 
-4. Walkthrough / Demo Example & Expected Output
+4. Notes / Expected Behavior
+-----------------------------
+- Default CLI given in ASSIGNMENT pdf LACKED many features like load/unload cargo and board/deboard passengers, along with we made features like gettotalfuelconsumption but isnt used so i added 3 new option 
+   Perform Action on Vehicle , Total fuel consumed by fleet for a journey,  List all veh in fleet 
+- When a vehicle is newly added it has no fuel so you have to refuel before starting
+- Proper exception/errors are handled for everything.
+- Total fuel consumption uses sum of ConsumeFuel as given in the pdf and also by the pdf Consume fuel actually reduces the fuel in all vehicles so while calling total fuel the fuel consumed is actually reduced.
+- Maintenance is required when mileage crosses 10,000 km.
+- Sorting by efficiency orders the fleet so that the most fuel-efficient show first (or according to your compareTo logic).
+- Invalid inputs (e.g. negative distance, duplicate IDs) will be handled via exceptions; error messages will be printed (but program continues).
+- CSV persistence should preserve all attributes needed to recreate Vehicles (type, ID, model, mileage, etc.).
+
+5. Walkthrough / Demo Example & Expected Output
 -----------------------------------------------
 Here is a sample run you can try:
 
@@ -131,12 +141,3 @@ Enter your choice :- 7
 Total vehicle => 1
 ... (same as before) ...
 
-5. Notes / Expected Behavior
------------------------------
-- When a vehicle is newly added it has no fuel so you have to refuel before starting
-- Proper exception/errors are handled for everything.
-- Total fuel consumption uses sum of ConsumeFuel as given in the pdf and also by the pdf Consume fuel actually reduces the fuel in all vehicles so while calling total fuel the fuel consumed is actually reduced.
-- Maintenance is required when mileage crosses 10,000 km.
-- Sorting by efficiency orders the fleet so that the most fuel-efficient show first (or according to your compareTo logic).
-- Invalid inputs (e.g. negative distance, duplicate IDs) will be handled via exceptions; error messages will be printed (but program continues).
-- CSV persistence should preserve all attributes needed to recreate Vehicles (type, ID, model, mileage, etc.).

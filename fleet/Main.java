@@ -16,7 +16,7 @@ class Main {
     while (running){
     Scanner scan = new Scanner(System.in);
     System.out.println("\n======== Fleet management system ========");
-    System.out.println( "1. Add Vehicle \n" + "2. Remove Vehicle \n" + "3. Perform Action on Vehicle \n" + "4. Start Journey \n" + "5. Refuel All \n" + "6. Perform Maintenance \n" + "7. Generate Report \n" + "8. Save Fleet \n" +"9. Load Fleet \n" +"10. Search by Type \n" +"11. List Vehicles Needing Maintenance \n" +"12. Exit ");
+    System.out.println( "1. Add Vehicle \n" + "2. Remove Vehicle \n" + "3. Perform Action on Vehicle \n" + "4. Start Journey \n" + "5. Refuel All \n" + "6. Perform Maintenance \n" + "7. Generate Report \n" + "8. Save Fleet \n" +"9. Load Fleet \n" +"10. Search by Type \n" +"11. List Vehicles Needing Maintenance \n" +"12. Total fuel consumed by fleet for a journey \n"+"13. List all veh in fleet \n"+"14. Exit ");
 
     System.out.println("=========================================");
     System.out.print("Enter your choice :- ");
@@ -235,11 +235,11 @@ class Main {
                   landfuel = scan.nextDouble();
                   }
                 if (airv > 0) {
-                  System.out.print("Enter fuel amount for air vehicles: ");
+                  System.out.print("Enter fuel amount for air vehicles :- ");
                   jetfuel = scan.nextDouble();
                   }
                 if (waterv > 0) {
-                  System.out.print("Enter fuel amount for water vehicles: ");
+                  System.out.print("Enter fuel amount for water vehicles :- ");
                   shipfuel = scan.nextDouble();
                   }
                   fleetManager.refuelAll(landfuel, jetfuel, shipfuel);
@@ -257,7 +257,7 @@ class Main {
                      System.out.println(report);
                     }
                     catch (InvalidOperationException e) {
-                    System.out.println("Could not generate report: " + e.getMessage());
+                    System.out.println("Could not generate report - " + e.getMessage());
                     }
                     break;
                 case 8:
@@ -292,7 +292,7 @@ class Main {
                   }
                     break;
                 case 10:
-                    System.out.println("Select vehicle type to search:");
+                    System.out.println("Select vehicle type to search :-");
                     System.out.println("1. Car, 2. Truck, 3. Bus, 4. Airplane, 5. CargoShip");
                     int typeChoice = scan.nextInt();
                     Class<?> searchClass = null;
@@ -309,7 +309,7 @@ class Main {
                         System.out.println("No vehicles of that type in the fleet.");
                        }
                       else {
-                        System.out.println("Vehicles found:");
+                        System.out.println("Vehicles found =>");
                         for (Vehicle v : found) {
                           System.out.println(v.getId() + " - " + v.getModel());
                         }
@@ -329,9 +329,32 @@ class Main {
                     }
                     break;
                 case 12:
+                  try{
+                  System.out.println("Select Journey dist => ");
+                  double journeydist = scan.nextDouble();
+                  System.out.println("Total fuel consumed by fleet for joruney => " + fleetManager.getTotalFuelConsumption(journeydist) + "L");}
+                  catch (InvalidOperationException e){
+                    System.out.print("error getting fuel" + e.getMessage());
+                  }
+                break;
+                case 13:
+                    List<Vehicle> allv = fleetManager.getFleet();
+                    if (allv.isEmpty()) {
+                    System.out.println("No vehicles in the fleet.");
+                    }
+                    else {
+                      System.out.println("Fleet vehicles:");
+                    for (Vehicle vvv : allv) {
+                        System.out.println(vvv.getClass().getSimpleName() + " - " + vvv.getId());
+
+                    }
+                    }
+                    break;
+                case 14:
                     System.out.println("Exiting program...");
                     running = false;
                     break;
+
                 default:
                     System.out.println("Invalid choice, please try again.");
                     break;
