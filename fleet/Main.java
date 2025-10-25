@@ -1,6 +1,7 @@
 package fleet;
 import vehicles.*;
 import exceptions.*;
+import java.util.TreeSet; 
 import java.util.Scanner; 
 import java.util.ArrayList;
 import java.io.BufferedReader;
@@ -15,8 +16,8 @@ class Main {
     boolean running = true;
     while (running){
     Scanner scan = new Scanner(System.in);
-    System.out.println("\n======== Fleet management system ========");
-    System.out.println( "1. Add Vehicle \n" + "2. Remove Vehicle \n" + "3. Perform Action on Vehicle \n" + "4. Start Journey \n" + "5. Refuel All \n" + "6. Perform Maintenance \n" + "7. Generate Report \n" + "8. Save Fleet \n" +"9. Load Fleet \n" +"10. Search by Type \n" +"11. List Vehicles Needing Maintenance \n" +"12. Total fuel consumed by fleet for a journey \n"+"13. List all veh in fleet \n"+"14. Exit ");
+    System.out.println("\n======== Fleet management system ========"); // new changes for A2
+    System.out.println( "1. Add Vehicle \n" + "2. Remove Vehicle \n" + "3. Perform Action on Vehicle \n" + "4. Start Journey \n" + "5. Refuel All \n" + "6. Perform Maintenance \n" + "7. Generate Report \n" + "8. Save Fleet \n" +"9. Load Fleet \n" +"10. Search by Type \n"  +"11. Total fuel consumed by fleet for a journey \n"+"12. Data analysis tools \n" + "13. Exit");
 
     System.out.println("=========================================");
     System.out.print("Enter your choice :- ");
@@ -316,7 +317,38 @@ class Main {
                       }
                     
                     break;
+        
                 case 11:
+                  try{
+                  System.out.println("Select Journey dist => ");
+                  double journeydist = scan.nextDouble();
+                  System.out.println("Total fuel consumed by fleet for joruney => " + fleetManager.getTotalFuelConsumption(journeydist) + "L");}
+                  catch (InvalidOperationException e){
+                    System.out.print("error getting fuel" + e.getMessage());
+                  }
+                break;
+         
+                case 12: // new additions for A2
+                  System.out.print("=== DATA ANALYSIS TOOLS === \n");
+                  System.out.print("1. Print all distinct models \n"+"2. List Vehicles Needing Maintenance \n" + "3. Sort by efficency \n"+ "4. Sort by model \n" + "5. Sort by speed \n" + "======================= \n");
+                  
+                  
+                  int dataact = scan.nextInt();
+                  
+                  switch (dataact){
+                    case 1: 
+                  TreeSet<String> allmodel = fleetManager.getmodellist();
+                  if (allmodel.isEmpty()) {
+                    System.out.println("No models in the fleet/empty fleet");
+                    }
+                    else {
+                      System.out.println("Distinct fleet models:");
+                    for (String ii : allmodel) {
+                        System.out.println(ii);
+
+                    }
+                    }break;
+                    case 2:
                     List<Vehicle> maint= fleetManager.getVehiclesNeedingMaintenance();
                     if (maint.isEmpty()) {
                       System.out.println("No vehicles needs maintenance");
@@ -327,30 +359,76 @@ class Main {
                           System.out.print(v.getId() + " ");
                       }
                     }
-                    break;
-                case 12:
-                  try{
-                  System.out.println("Select Journey dist => ");
-                  double journeydist = scan.nextDouble();
-                  System.out.println("Total fuel consumed by fleet for joruney => " + fleetManager.getTotalFuelConsumption(journeydist) + "L");}
-                  catch (InvalidOperationException e){
-                    System.out.print("error getting fuel" + e.getMessage());
-                  }
-                break;
-                case 13:
+                      break;
+                    case 3:
+                      try{
+                    fleetManager.sortFleetByEfficiency();
                     List<Vehicle> allv = fleetManager.getFleet();
+                    
                     if (allv.isEmpty()) {
                     System.out.println("No vehicles in the fleet.");
                     }
                     else {
+                      System.out.println("sorted list");
                       System.out.println("Fleet vehicles:");
                     for (Vehicle vvv : allv) {
-                        System.out.println(vvv.getClass().getSimpleName() + " - " + vvv.getId());
+                        System.out.println(vvv.getClass().getSimpleName() + " - " + vvv.getId() + " -> " + vvv.calculateFuelEfficiency() + " km/l");
+
+                    }
+                    Vehicle vmeff = fleetManager.getMostEffVehicle();
+                    Vehicle vleff = fleetManager.getLeastEff();
+                    System.out.println("Most efficient vehicle => " + vmeff.getId() + " - " + vmeff.getModel() + " - "+ vmeff.calculateFuelEfficiency() + " km/l");
+                    System.out.println("Least efficient vehicle => " +vleff.getId() + " - " + vleff.getModel() + " - "+vleff.calculateFuelEfficiency() + " km/l");
+                    }}
+                    catch (InvalidOperationException e){
+                      System.out.println("Error -" + e);
+                    }
+                      break;
+                    case 4:
+                    fleetManager.sortFleetByModel();
+                    List<Vehicle> allvv = fleetManager.getFleet();
+                       if (allvv.isEmpty()) {
+                    System.out.println("No vehicles in the fleet.");
+                    }
+                    else {
+                      System.out.println("sorted list");
+                      System.out.println("Fleet vehicles:");
+                    for (Vehicle vvvv : allvv) {
+                        System.out.println(  vvvv.getModel() + " -> " +vvvv.getId() + " - " + vvvv.getClass().getSimpleName());
 
                     }
                     }
+                      break;
+                    case 5:
+                      fleetManager.sortFleetBySpeed();
+                      List<Vehicle> allvvv = fleetManager.getFleet();
+                       if (allvvv.isEmpty()) {
+                    System.out.println("No vehicles in the fleet.");
+                    }
+                    else {
+                     
+                      System.out.println("sorted list");
+                      System.out.println("Fleet vehicles:");
+                    for (Vehicle vvvvv : allvvv) {
+                        System.out.println(vvvvv.getClass().getSimpleName() + " - " + vvvvv.getId() + " -> " + vvvvv.getmaxSpeed() + " km/h");
+                  
+                    }
+                    Vehicle vfast = fleetManager.getFastestVehicle();
+                    Vehicle vslow = fleetManager.getSlowestVehicle();
+                    System.out.println("fastest vehicle => " + vfast.getId() + " - " + vfast.getModel() + " - "+ vfast.getmaxSpeed() + " km/h");
+                    System.out.println("slowest vehicle => " + vslow.getId() + " - " + vslow.getModel() + " - " + vslow.getmaxSpeed() + " km/h");
+
+                    }break;
+
+                    default:
+                    System.out.println("Invalid choice");
                     break;
-                case 14:
+
+                    }
+                    break;
+
+
+                case 13:
                     System.out.println("Exiting program...");
                     running = false;
                     break;

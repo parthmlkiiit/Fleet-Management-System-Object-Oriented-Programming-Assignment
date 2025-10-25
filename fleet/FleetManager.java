@@ -7,29 +7,61 @@ import java.io.FileReader;
 import java.util.List; 
 import java.util.Collections;
 import java.io.FileWriter;
+import java.util.TreeSet; 
 import java.io.IOException;
+import java.util.Comparator;
+
 public class FleetManager {
+  private TreeSet<String> modelname = new TreeSet<>();
   private ArrayList<Vehicle> fleet = new ArrayList<Vehicle>();
   public List<Vehicle> getFleet() {
-    return fleet;
+    return fleet;}
+  public TreeSet<String> getmodellist() { // new additions for A2
+    return modelname;
 }
 
-  public void addVehicle(Vehicle v) throws InvalidOperationException{
+
+  public void addVehicle(Vehicle v) throws InvalidOperationException{ // new changes for A2
     if (v == null) {
       throw new InvalidOperationException("Vehicle cannot be null");
     }
     String tempid = v.getId();
+    String tempmodel = v.getModel();
+    modelname.add(tempmodel); // should be id as 2 vehicles can be made from the same model but id cannot be some but implemented
     for (Vehicle vehicleinlist : fleet){
       if (vehicleinlist.getId().equals(tempid)) throw new InvalidOperationException("vehicle-" + vehicleinlist.getId() + " already exists");      
     }
     fleet.add(v);
   }
-  public void removeVehicle(String id) throws InvalidOperationException{
+  public Boolean checkmodelunique(String id, String model){// new additions for A2
+    
+     // helper function to only delete when the model is unique, so if the car is of toyota but other cars are also from toyota , you dont delete the model from the list
+    Boolean tempuni = true;
+    for (Vehicle v : fleet){
+      if (v.getId().equals(id)){
+        continue;
+      }
+      else {
+        if (v.getModel().equals(model)){
+          tempuni = false;
+          break; 
+        }
+      }
+    }
+    return tempuni;
+  }
+  public void removeVehicle(String id) throws InvalidOperationException{ // new changes for A2
      if (id == null || id.isBlank()) {
       throw new InvalidOperationException("ID cannot be empty");
     }
     for (int i = 0; i < fleet.size(); i++){
+    
       if (fleet.get(i).getId().equals(id)){
+        Vehicle v = fleet.get(i);
+        
+        if (checkmodelunique(id, v.getModel())){
+          modelname.remove(v.getModel());
+        }
         fleet.remove(i);
         return;
       }
@@ -86,6 +118,30 @@ public class FleetManager {
   public void sortFleetByEfficiency(){
     Collections.sort(fleet);
   }
+  public void sortFleetByModel() {
+    Collections.sort(fleet, Comparator.comparing(Vehicle::getModel));
+}
+  public void sortFleetBySpeed() {
+    Collections.sort(fleet, Comparator.comparingDouble(Vehicle::getmaxSpeed)); // we already overrided the compareto so we have to define the comparator here
+
+}
+public Vehicle getFastestVehicle() {
+    return Collections.max(fleet, Comparator.comparingDouble(Vehicle::getmaxSpeed));
+}
+
+public Vehicle getSlowestVehicle() {
+    return Collections.min(fleet, Comparator.comparingDouble(Vehicle::getmaxSpeed));
+}
+
+public Vehicle getMostEffVehicle() {
+    return Collections.max(fleet); // uses compareTo() from root
+}
+
+public Vehicle getLeastEff() {
+    return Collections.min(fleet); // uses compareTo() from root
+}
+
+
   public String generateReport() throws InvalidOperationException{//total vehicles, count by type, average efficiency, total mileage, maintenance status)
   int totalvehiclecounter = fleet.size();
   List<Integer> counterlist = new ArrayList<>();
@@ -196,14 +252,21 @@ public class FleetManager {
 }
 
   }
-  public void loadFromFile(String filename) throws InvalidOperationException {
+  public void loadFromFile(String filename) throws InvalidOperationException { // new changes for A2
+    
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        modelname.clear();
+        fleet.clear();
         String line;
         while ((line = reader.readLine()) != null) {
             if (line.trim().isEmpty()) continue; // Skippign empty lines
             String[] temp = line.split(",");
+            try{
             Vehicle veh = createv(temp);
-            fleet.add(veh);
+            fleet.add(veh);}
+            catch (InvalidOperationException | NumberFormatException e){
+              System.out.println("invalid line: \"" + line + "\" -> " + e.getMessage());
+              System.out.println("skipping");}// if parsing value is wrong isntead of crashing it skips the line
         }
     } catch (IOException e) {
         System.out.println("Error reading file: " + filename + "error => " + e.getMessage());
@@ -211,8 +274,10 @@ public class FleetManager {
     }
 }
   
-private Vehicle createv(String[] temp) throws InvalidOperationException {
+private Vehicle createv(String[] temp) throws InvalidOperationException { // new changes for A2
     String type = temp[0].trim();
+    String model = temp[2].trim();
+    modelname.add(model);
 if (type.equals("Car")) {
     Car car = new Car(
         temp[1].trim(),  
